@@ -1,0 +1,19 @@
+<header>
+  <nav
+    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom mb-3"
+  >
+    <div class="container">
+      <a class="navbar-brand" [routerLink]="['/todos']">TODO</a>
+      <div>
+        <ul class="navbar-nav flex-grow">
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/login']">Log in</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/signin']">Sign in</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
