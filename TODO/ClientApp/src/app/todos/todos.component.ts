@@ -3,6 +3,8 @@ import { Todo } from '../Todo';
 import { TodoDataService } from '../todo-data.service';
 import { ActivatedRoute } from '@angular/router';
 import { map, finalize } from 'rxjs/operators';
+import { User } from '../User';
+import { UsersService } from '../users.service';
 
 @Component({
     selector: 'app-todos',
@@ -15,12 +17,17 @@ import { map, finalize } from 'rxjs/operators';
 
 export class TodosComponent implements OnInit {
 
-    constructor(
+  constructor(
+      private userService: UsersService,
         private todoDataService: TodoDataService,
         private route: ActivatedRoute
-    ) {
+  ) {
+    //this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     }
 
+
+  currentUser: User;
+  users: User[] = [];
     todos: Todo[] = [];
 
     public ngOnInit() {
@@ -71,6 +78,13 @@ export class TodosComponent implements OnInit {
                     this.todos = this.todos.filter((t) => t.id !== todo.id);
                 }
             );
-    }
+  }
+
+  /*deleteUser(id: number) {
+    this.userService.deleteUser(id).subscribe(
+      (_) => {
+      }
+    )
+  }*/
 
 }

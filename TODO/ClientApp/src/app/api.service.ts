@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Todo } from './Todo';
 import { Observable, throwError } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
 import { User } from './User';
+import { debug } from 'util';
 
 const API_URL = 'https://localhost:44386';//environment.apiUrl;
 
@@ -18,7 +19,7 @@ export class ApiService {
 
     private handleError(error: Response) {
         console.error('ApiService::handleError', error);
-        return Observable.throw(error);
+        return throwError(error);
     }
 
     // API: GET /todos  deleted due to error": Observable<Todo>"
@@ -84,26 +85,91 @@ export class ApiService {
             );
     }
 
-    // API: POST SIGNIN
-    public createAccount(user: User) {
+
+
+    public getAllUsers() {
+      return this.http
+        .get<User[]>(API_URL + '/api/Users/GetAllUsers')
+        .pipe(
+          map((response) => {
+            return response;
+          }),
+          catchError(this.handleError)
+        );
+     }
+
+    public getUser(user: User) {
+      return this.http
+        .get(API_URL + '/api/Users/GetUser/' + user.Username)
+        .pipe(
+          map((response: User) => {
+            //    console.log("GET", response);
+            return new User(response);
+          }),
+          catchError(this.handleError)
+        );
+  }
+
+    public registerUser(user: User) {
         return this.http
-            .post<User>(API_URL + 'signin/api/Users/CreateAccount/', user)
+          .post<User>(API_URL + '/api/Users/RegisterUser/', user)
             .pipe(
                 map(response => {
                     return response;
                 }),
                 catchError(this.handleError)
             );
-    }
-    // API: GET LOGIN
-    public getAccount(user: User) {
+  }
+
+  public updateUser(user: User) {
+    return this.http
+      .put(API_URL + '/api/Users/UpdateUser/' + user.Id, user)
+      .pipe(
+        map((response: User) => {
+          //console.log('PUT', response);
+          return response;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  public deleteUser(id: number) {
+    return this.http
+      .delete(API_URL + '/api/Users/DeleteUser/' + id)
+      .pipe(
+        map((response: User) => null
+          // , console.log('Delete')
+        ),
+        catchError(this.handleError)
+
+      );
+  }
+
+  public authenticate(username: string, password: string) {
+    return this.http
+      .post<any>(API_URL + '/api/Users/Authenticate/', { username: username, password: password })
+      .pipe(
+        map(user => {
+            console.log(user);
+            console.log(user.token);
+          if (user && user.token) {
+            localStorage.setItem('currentUser', JSON.stringify(user));
+          }
+          return user;
+        })
+      )
+  }
+  // API: GET LOGIN
+ /*
+  public getUser(user: User) {
         return this.http
-            .get<User>(API_URL + '/api/Users/GetAccount/' + user)
-            .pipe(
-                map((response: User) => {
+          .get<User>(API_URL + '/api/Users/GetUser/' + user.Id)
+          .pipe(
+            map((response: User) => {
                     return new User(response);
                 }),
                 catchError(this.handleError)
             );
     }
+*/
 }

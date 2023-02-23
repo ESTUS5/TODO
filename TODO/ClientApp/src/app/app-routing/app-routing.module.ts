@@ -6,12 +6,13 @@ import { LoginComponent } from '../log-in/log-in.component';
 import { SigninComponent } from '../sign-in/sign-in.component';
 import { PageNotFoundComponent } from '../page-not-found/page-not-found.component';
 import { TodosResolver } from '../../todos.resolver';
+import { AuthGuard } from '../guard/auth.guard';
 
 
 const routes: Routes = [
     {
         path: '',
-        redirectTo: '/todos',
+        redirectTo: 'todos',
         pathMatch: 'full'
     },
     {
@@ -19,7 +20,8 @@ const routes: Routes = [
         component: TodosComponent,
         resolve: {
             todos: TodosResolver
-        }
+        },
+        //canActivate: [AuthGuard]
     },
     {
         path: 'login',
@@ -40,5 +42,7 @@ const routes: Routes = [
     exports: [RouterModule],
     providers: [TodosResolver]
 })
+
+//export const routing = RouterModule.forRoot(routes);
 
 export class AppRoutingModule { }
