@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ApiService = void 0;
 var Todo_1 = require("./Todo");
 var rxjs_1 = require("rxjs");
 var operators_1 = require("rxjs/operators");
@@ -12,7 +13,7 @@ var ApiService = /** @class */ (function () {
     }
     ApiService.prototype.handleError = function (error) {
         console.error('ApiService::handleError', error);
-        return rxjs_1.Observable.throw(error);
+        return rxjs_1.throwError(error);
     };
     // API: GET /todos  deleted due to error": Observable<Todo>"
     ApiService.prototype.getAllTodos = function () {
@@ -57,21 +58,54 @@ var ApiService = /** @class */ (function () {
         // , console.log('Delete')
         ), operators_2.catchError(this.handleError));
     };
-    // API: POST SIGNIN
-    ApiService.prototype.createAccount = function (user) {
+    ApiService.prototype.getAllUsers = function () {
         return this.http
-            .post(API_URL + 'signin/api/Users/CreateAccount/', user)
+            .get(API_URL + '/api/Users/GetAllUsers')
             .pipe(operators_1.map(function (response) {
             return response;
         }), operators_2.catchError(this.handleError));
     };
-    // API: GET LOGIN
-    ApiService.prototype.getAccount = function (user) {
+    ApiService.prototype.getUser = function (user) {
         return this.http
-            .get(API_URL + '/api/Users/GetAccount/' + user)
+            .get(API_URL + '/api/Users/GetUser/' + user.Username)
             .pipe(operators_1.map(function (response) {
+            //    console.log("GET", response);
             return new User_1.User(response);
         }), operators_2.catchError(this.handleError));
+    };
+    ApiService.prototype.registerUser = function (user) {
+        return this.http
+            .post(API_URL + '/api/Users/RegisterUser/', user)
+            .pipe(operators_1.map(function (response) {
+            return response;
+        }), operators_2.catchError(this.handleError));
+    };
+    ApiService.prototype.updateUser = function (user) {
+        return this.http
+            .put(API_URL + '/api/Users/UpdateUser/' + user.Id, user)
+            .pipe(operators_1.map(function (response) {
+            //console.log('PUT', response);
+            return response;
+        }), operators_2.catchError(this.handleError));
+    };
+    ApiService.prototype.deleteUser = function (id) {
+        return this.http
+            .delete(API_URL + '/api/Users/DeleteUser/' + id)
+            .pipe(operators_1.map(function (response) { return null; }
+        // , console.log('Delete')
+        ), operators_2.catchError(this.handleError));
+    };
+    ApiService.prototype.authenticate = function (username, password) {
+        return this.http
+            .post(API_URL + '/api/Users/Authenticate/', { username: username, password: password })
+            .pipe(operators_1.map(function (user) {
+            console.log(user);
+            console.log(user.token);
+            if (user && user.token) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+            }
+            return user;
+        }));
     };
     return ApiService;
 }());

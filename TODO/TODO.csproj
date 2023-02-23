@@ -35,12 +35,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\helpers\error.interceptor.ts" />
+    <None Remove="ClientApp\src\app\helpers\fake.backend.ts" />
+    <None Remove="ClientApp\src\app\helpers\jwt.interceptor.ts" />
     <None Remove="ClientApp\src\app\pagenotfound.component.ts" />
     <None Remove="ClientApp\src\app\todos\todos.component.html" />
     <None Remove="ClientApp\src\app\todos\todos.component.ts" />
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\helpers\fake.backend.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\helpers\jwt.interceptor.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\app\helpers\error.interceptor.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\todos\todos.component.html" />
     <TypeScriptCompile Include="ClientApp\src\app\todos\todos.component.ts" />
   </ItemGroup>

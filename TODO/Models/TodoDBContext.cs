@@ -14,6 +14,7 @@ namespace TODO.Models
         }
 
         public virtual DbSet<TodoItem> TodoItem { get; set; }
+        public virtual DbSet<User> TodoUser { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,7 +22,7 @@ namespace TODO.Models
             {
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();//ValueGeneratedNever();
 
-                //entity.Property(e => e.UserID);
+                entity.Property(e => e.IdUser);
 
                 entity.Property(e => e.Complete).HasColumnName("Complete");
 
@@ -30,24 +31,20 @@ namespace TODO.Models
                     .HasColumnName("Title");
             });
             
-            /*modelBuilder.Entity<Users>(entity =>
+            modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.UserID).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Username).IsRequired().HasColumnName("Username");
 
                 entity.Property(e => e.Password).IsRequired().HasColumnName("Password");
 
-                entity.Property(e => e.Email).HasColumnName("Email");
-
-
-            });*/
+            });
             
             OnModelCreatingPartial(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
-        //public virtual DbSet<Users> Users { get; set; }
     }
 }

@@ -1,8 +1,16 @@
-<div>
-  <h1>Sign in</h1>
-    Username
-    <input type="text" name="username" />
-    Password
-    <input type="password" name="password" />
-    <button (remove)="onSubmitAccount($event)">Sign in</button>
-</div>
+
+  <h1>Signin</h1> 
+  <form class="form">
+    <div>
+      <label for="username">Username</label>
+      <input type="text" [(ngModel)]="user.Username" name="username"/>
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input type="password" [(ngModel)]="user.Password" name="password" />
+    </div>
+    <button type="button" class="form" (click)="onSubmit(user)">Submit</button>
+  </form>
+    
+
+
